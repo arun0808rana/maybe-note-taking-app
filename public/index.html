@@ -1,17 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="dirTree.css">
 </head>
+
 <body>
     <div class="main">
-        <textarea class="lhs">hey</textarea>
+        <div class="sidebar">
+            <div class="box">
+                <ul class="directory-list">
+                    <li class="folder">assets
+                        <ul>
+                            <li class="folder">css
+                                <ul>
+                                    <li>typography.css</li>
+                                    <li>layout.css</li>
+                                    <li>modules.css</li>
+                                    <li>states.css</li>
+                                    <li>theme.css</li>
+                                </ul>
+                            </li>
+                            <li class="folder">js
+                                <ul>
+                                    <li>custom.js</li>
+                                    <li>jquery.js</li>
+                                </ul>
+                            </li>
+                            <li class="folder">images
+                                <ul>
+                                    <li>logo.svg</li>
+                                    <li>arrow-sprite.svg</li>
+                                    <li>social-sprite.svg</li>
+                                </ul>
+                            </li>
+                            <li>functions.php</li>
+                        </ul>
+                    </li>
+                    <li class="folder">templates
+                        <ul>
+                            <li class="folder"><a href="#just-makin-sure-links-look-ok">pages</a>
+                                <ul>
+                                    <li><a href="#just-makin-sure-links-look-ok">about.tpl</a></li>
+                                    <li>pricing.tpl</li>
+                                    <li>contact.tpl</li>
+                                    <li>home.tpl</li>
+                                    <li>features.tpl</li>
+                                </ul>
+                            </li>
+                            <li>header.tpl</li>
+                            <li>menu.tpl</li>
+                            <li>footer.tpl</li>
+                        </ul>
+                    </li>
+                    <li>index.php</li>
+                    <li>style.css</li>
+                </ul>
+            </div>
+            <div class="new-elements-cont">
+                <button class="new-doc-btn">
+                    <img onclick="handleLowbarClick(event, 'NEW_FILE')" class="new-doc-btn-icons"
+                        src="./assets/file-plus.svg" alt="">
+                </button>
+                <button class="new-doc-btn">
+                    <img onclick="handleLowbarClick(event, 'NEW_DIR')" class="new-doc-btn-icons"
+                        src="./assets/folder-plus.svg" alt="">
+                </button>
+                <button class="new-doc-btn">
+                    <img onclick="handleLowbarClick(event, 'NEW_RELOAD_TREE')" class="new-doc-btn-icons"
+                        src="./assets/arrow-counter-clockwise.svg" alt="">
+                </button>
+                <button class="new-doc-btn">
+                    <img onclick="handleLowbarClick(event, 'COLLAPSE_TREE')" class="new-doc-btn-icons"
+                        src="./assets/caret-double-up.svg" alt="">
+                </button>
+            </div>
+        </div>
+        <!-- <template id="textAreaTemplateID">
+            <textarea class="lhs">hey</textarea>
+        </template> -->
+        <textarea class="display lhs" oninput="onTextareaChange(event)">hey</textarea>
         <div class="rhs">hey</div>
     </div>
     <script src="./main.js"></script>
+    <!-- <script src="../node_modules/socket.io/client-dist/socket.io.js"></script> -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"
+        integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+        crossorigin="anonymous"></script>
+    <script>
+        // var socket = io();
+        // socket.emit('chat messages', 'damnn');
+        // socket.on('chat messages', function (msg) {
+        //     // alert(msg)
+        // })
+    </script>
 </body>
+
 </html>

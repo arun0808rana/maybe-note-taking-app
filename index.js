@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const http = require('http');
+const server = http.createServer(app);
 const port = 3000
 const { readFile } = require('fs');
 const hljs = require('highlight.js');
@@ -18,35 +20,53 @@ const md = require('markdown-it')({
     }
 });
 
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 app.use(express.static(`${__dirname}/public`));
 md.use(require('markdown-it-container'), 'spoiler', {
 
-    validate: function(params) {
-      return params.trim().match(/^spoiler\s+(.*)$/);
+    validate: function (params) {
+        return params.trim().match(/^spoiler\s+(.*)$/);
     },
-  
+
     render: function (tokens, idx) {
-      var m = tokens[idx].info.trim().match(/^spoiler\s+(.*)$/);
-  
-      if (tokens[idx].nesting === 1) {
-        // opening tag
-        return '<details><summary>' + md.utils.escapeHtml(m[1]) + '</summary>\n';
-  
-      } else {
-        // closing tag
-        return '</details>\n';
-      }
+        var m = tokens[idx].info.trim().match(/^spoiler\s+(.*)$/);
+
+        if (tokens[idx].nesting === 1) {
+            // opening tag
+            return '<details><summary>' + md.utils.escapeHtml(m[1]) + '</summary>\n';
+
+        } else {
+            // closing tag
+            return '</details>\n';
+        }
     }
-  });
-  
+});
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('chat messages', (msg) => {
+        console.log('message: ' + msg);
+    });
+    io.to(socket.id).emit('chat messages', 'what...')
+
+    socket.on('FILE_EDIT', (currentDocument) => {
+        currentDocument = JSON.parse(currentDocument);
+        console.log('message: ' + currentDocument.value);
+        io.to(socket.id).emit('FILE_EDIT', 'success')
+    });
+ 
+});
+
 app.get('/', (req, res) => {
-    res.sendFile('public/index.html', {root: __dirname })
+    res.sendFile('public/index.html', { root: __dirname })
 })
 
 app.get('/markdown-parsed', (req, res) => {
 
-      
-      console.log(md.render('::: spoiler click me\n*content*\n:::\n'));
+
+    console.log(md.render('::: spoiler click me\n*content*\n:::\n'));
 
     readFile('./generic.md', 'utf8', (err, data) => {
         const result = md.render(data);
@@ -62,7 +82,7 @@ app.get('/markdown-raw', (req, res) => {
 
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 
@@ -78,7 +98,7 @@ function dirTree(filename) {
 
     if (stats.isDirectory()) {
         info.type = "folder";
-        info.children = fs.readdirSync(filename).map(function(child) {
+        info.children = fs.readdirSync(filename).map(function (child) {
             return dirTree(filename + '/' + child);
         });
     } else {
@@ -91,7 +111,7 @@ function dirTree(filename) {
 }
 const wtf = dirTree(__dirname + '/vault');
 let json = JSON.stringify(wtf);
-fs.writeFile('myjsonfile.json', json, 'utf8', ()=>{});
+fs.writeFile('myjsonfile.json', json, 'utf8', () => { });
 // fs.writeFileSync('/temp.json', json);
-console.log('wtf',wtf)
+// console.log('wtf', wtf)
 
