@@ -1,6 +1,8 @@
 class Document {
-    constructor(value = '') {
+    constructor(value = '', filename = 'Untitled') {
         this.value = value;
+        this.filename = filename;
+        this.uuid = ''
     }
 }
 
@@ -11,7 +13,7 @@ addEventListener('DOMContentLoaded', init);
 
 function init() {
     socket = io();
-    socket.on('FILE_EDIT', function (msg) {
+    socket.on('FILE_WRITE', function (msg) {
         console.log(msg)
     })
     getMD();
@@ -54,8 +56,12 @@ function handleLowbarClick(e, MSG) {
             // mainParent.insertBefore(clone, mainParent.children[2]);
 
             // sol2 effecient relatively
-            const textarea = document.querySelector('textarea');
             currentDocument = new Document();
+            currentDocument.uuid = uuidv4();
+            const textarea = document.querySelector('textarea');
+            const documentTitle = document.querySelector('.doc-title');
+            documentTitle.value = currentDocument.filename;
+            textarea.focus();
             textarea.value = '';
             console.log(currentDocument, 'currentDocument');
             break;
@@ -77,8 +83,18 @@ function handleLowbarClick(e, MSG) {
 
 function onTextareaChange(e) {
     currentDocument.value = e.target.value;
-    socket.emit('FILE_EDIT', JSON.stringify(currentDocument));
-    console.log(currentDocument,'currentDocument')
+    socket.emit('FILE_WRITE', JSON.stringify(currentDocument));
+    console.log(currentDocument, 'currentDocument')
 }
 
+function onTitleInput(e) {
+    currentDocument.filename = e.target.value;
+    socket.emit('FILE_WRITE', JSON.stringify(currentDocument));
+    console.log(currentDocument, 'currentDocument')
+}
 
+function uuidv4() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}

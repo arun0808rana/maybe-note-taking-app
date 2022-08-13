@@ -1,4 +1,4 @@
-*{
+* {
   box-sizing: border-box;
 }
 .main {
@@ -6,13 +6,20 @@
   display: flex;
 }
 
-.lhs {
+.lhs-doc-container {
   width: 100%;
   height: 96vh;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   border: 1px solid #d3d3d3;
   margin-right: 4px;
   padding: 8px;
+}
+
+.lhs.display {
+  width: 100%;
+  height: 88vh;
+  overflow-y: auto;
+  margin-top: 1vh;
 }
 
 .rhs {
@@ -102,3 +109,18 @@ tr:nth-child(even) {
   background-color: #eee;
 }
 
+.doc-title {
+  width: 100%;
+  font-size: 32px;
+  font-weight: bold;
+  border: none;
+  margin-top: 1vh;
+}
+
+.doc-title:focus{
+  outline: none;
+}
+
+.doc-title::placeholder {
+  color: #d3d3d3;
+}

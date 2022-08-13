@@ -51,12 +51,13 @@ io.on('connection', (socket) => {
     });
     io.to(socket.id).emit('chat messages', 'what...')
 
-    socket.on('FILE_EDIT', (currentDocument) => {
+    socket.on('FILE_WRITE', (currentDocument) => {
         currentDocument = JSON.parse(currentDocument);
-        console.log('message: ' + currentDocument.value);
-        io.to(socket.id).emit('FILE_EDIT', 'success')
+        let filename = currentDocument.uuid + '.md';
+        write(__dirname + `/vault/${filename}`, currentDocument.value)
+        io.to(socket.id).emit('FILE_EDIT', 'success');
     });
- 
+
 });
 
 app.get('/', (req, res) => {
@@ -115,3 +116,7 @@ fs.writeFile('myjsonfile.json', json, 'utf8', () => { });
 // fs.writeFileSync('/temp.json', json);
 // console.log('wtf', wtf)
 
+
+function write(path, data) {
+    fs.writeFile(path, data, 'utf8', () => { });
+}

@@ -84,8 +84,11 @@
         <!-- <template id="textAreaTemplateID">
             <textarea class="lhs">hey</textarea>
         </template> -->
-        <textarea class="display lhs" oninput="onTextareaChange(event)">hey</textarea>
-        <div class="rhs">hey</div>
+        <div class="lhs-doc-container">
+            <input type="text" class="doc-title" oninput="onTitleInput(event)" placeholder="Enter file name...">
+            <textarea class="display lhs" oninput="onTextareaChange(event)"></textarea>
+        </div>
+        <div class="rhs"></div>
     </div>
     <script src="./main.js"></script>
     <!-- <script src="../node_modules/socket.io/client-dist/socket.io.js"></script> -->
